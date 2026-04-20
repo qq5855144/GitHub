@@ -5844,14 +5844,37 @@ body.light-theme #clearSearchHistoryBtn:hover {
 .pre-upload-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
     padding: 8px;
     border-bottom: 1px solid #374151;
     background: rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s, border-color 0.2s;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    cursor: default;
 }
 
 .pre-upload-item:last-child {
     border-bottom: none;
+    margin-bottom: 0;
+}
+
+.pre-upload-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pre-upload-item.selected-file {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.pre-upload-item .pre-upload-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #6366f1;
+    flex-shrink: 0;
+    margin: 0;
 }
 
 .pre-upload-name {
@@ -5860,14 +5883,173 @@ body.light-theme #clearSearchHistoryBtn:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 0.8rem;
-    margin-right: 10px;
     color: #e0e7ff;
 }
 
 .pre-upload-size {
     font-size: 0.7rem;
     color: #9ca3af;
-    margin-right: 10px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.pre-upload-item .remove-pending-btn {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.pre-upload-item:hover .remove-pending-btn {
+    opacity: 1;
+}
+
+/* 数量徽标 */
+.pre-upload-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 10px;
+    margin-left: 8px;
+}
+
+.pre-upload-count-badge:empty,
+.pre-upload-count-badge[data-count="0"] {
+    display: none;
+}
+
+/* 批量操作工具栏 */
+.pre-upload-batch-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    background: rgba(17, 24, 39, 0.6);
+    border: 1px solid #374151;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all 0.25s ease;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.pre-upload-batch-bar.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    height: auto;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+}
+
+.pre-upload-batch-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pre-upload-select-all-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #d1d5db;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pre-upload-select-all-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #6366f1;
+    margin: 0;
+}
+
+.pre-upload-selected-count {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.pre-upload-batch-delete:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* 拖拽上传区域 */
+.pre-upload-drop-zone {
+    position: relative;
+    border-radius: 6px;
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.pre-upload-drop-zone.drag-over {
+    border: 2px dashed #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.pre-upload-drop-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.15);
+    backdrop-filter: blur(4px);
+    border: 2px dashed #6366f1;
+    border-radius: 6px;
+    color: #c7d2fe;
+    font-size: 1rem;
+    font-weight: 600;
+    pointer-events: none;
+    animation: dropZonePulse 1.5s ease-in-out infinite;
+}
+
+.pre-upload-drop-overlay i {
+    font-size: 2.5rem;
+    color: #818cf8;
+}
+
+@keyframes dropZonePulse {
+    0%, 100% { border-color: #6366f1; background: rgba(99, 102, 241, 0.15); }
+    50% { border-color: #818cf8; background: rgba(99, 102, 241, 0.25); }
+}
+
+.pre-upload-list-container {
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid #374151;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.pre-upload-list-container:has(.empty-state) {
+    border-style: dashed;
+}
+
+/* 文件总大小统计 */
+.pre-upload-total-size {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-align: right;
+    padding: 4px 4px 8px;
+    min-height: 22px;
 }
 
 /* 亮色主题适配 */
@@ -5875,8 +6057,54 @@ body.light-theme .pre-upload-item {
     background: #f9fafb;
     border-bottom-color: #e5e7eb;
 }
+
+body.light-theme .pre-upload-item.selected-file {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+body.light-theme .pre-upload-item:hover {
+    background: #f3f4f6;
+}
+
 body.light-theme .pre-upload-name {
     color: #1f2937;
+}
+
+body.light-theme .pre-upload-batch-bar {
+    background: rgba(243, 244, 246, 0.8);
+    border-color: #e5e7eb;
+}
+
+body.light-theme .pre-upload-select-all-label {
+    color: #4b5563;
+}
+
+body.light-theme .pre-upload-selected-count {
+    color: #6b7280;
+}
+
+body.light-theme .pre-upload-drop-zone.drag-over {
+    border-color: #4f46e5;
+    background: rgba(79, 70, 229, 0.05);
+}
+
+body.light-theme .pre-upload-drop-overlay {
+    background: rgba(79, 70, 229, 0.1);
+    border-color: #4f46e5;
+    color: #4338ca;
+}
+
+body.light-theme .pre-upload-drop-overlay i {
+    color: #4f46e5;
+}
+
+body.light-theme .pre-upload-list-container:has(.empty-state) {
+    border-color: #d1d5db;
+}
+
+body.light-theme .pre-upload-total-size {
+    color: #6b7280;
 }
 
 
@@ -8209,17 +8437,46 @@ body.light-theme .btn-secondary-action:hover {
 <div id="preUploadModal" class="modal-overlay hidden">
     <div class="modal-form-container">
         <h3>
-            <span class="modal-title-text">待上传文件</span>
+            <span class="modal-title-text">
+                <i class="fa fa-cloud-upload"></i> 待上传文件
+                <span id="preUploadCountBadge" class="pre-upload-count-badge">0</span>
+            </span>
             <button class="btn-icon-sm" onclick="hidePreUploadModal()" title="关闭">
                 <i class="fa fa-times"></i>
             </button>
         </h3>
-        
-        <div id="preUploadList" class="scmz" style="max-height: 300px; overflow-y: auto; margin: 10px 0; border: 1px solid #374151; border-radius: 4px; padding: 5px;">
-            <div class="empty-state" style="padding: 20px;">
-                <p>暂无文件，请点击下方按钮添加</p>
+
+        <!-- 批量操作工具栏 -->
+        <div id="preUploadBatchBar" class="pre-upload-batch-bar">
+            <div class="pre-upload-batch-left">
+                <label class="pre-upload-select-all-label">
+                    <input type="checkbox" id="preUploadSelectAll" title="全选/反选">
+                    <span>全选</span>
+                </label>
+                <span id="preUploadSelectedCount" class="pre-upload-selected-count">已选 0 个</span>
+            </div>
+            <button id="preUploadBatchDeleteBtn" class="btn-icon-sm danger pre-upload-batch-delete" title="删除选中" disabled>
+                <i class="fa fa-trash"></i>
+            </button>
+        </div>
+
+        <!-- 拖拽上传区域 -->
+        <div id="preUploadDropZone" class="pre-upload-drop-zone">
+            <div id="preUploadDropOverlay" class="pre-upload-drop-overlay hidden">
+                <i class="fa fa-cloud-upload"></i>
+                <span>释放文件以上传</span>
+            </div>
+            <div id="preUploadList" class="scmz pre-upload-list-container">
+                <div class="empty-state" style="padding: 20px;">
+                    <i class="fa fa-cloud-upload" style="font-size: 2rem; margin-bottom: 10px; color: #9ca3af;"></i>
+                    <p style="font-size: 0.8rem;">暂无文件</p>
+                    <p style="font-size: 0.7rem; color: #6b7280; margin-top: 4px;">点击"添加文件"或拖拽文件到此处</p>
+                </div>
             </div>
         </div>
+
+        <!-- 文件大小统计 -->
+        <div id="preUploadTotalSize" class="pre-upload-total-size"></div>
 
         <div class="modal-buttons" style="justify-content: space-between;">
             <button id="preUploadAddBtn" class="btn btn-secondary">
@@ -8227,7 +8484,9 @@ body.light-theme .btn-secondary-action:hover {
             </button>
             <div style="display: flex; gap: 10px;">
                 <button id="preUploadClearBtn" class="btn btn-danger">清空</button>
-                <button id="preUploadStartBtn" class="btn btn-primary">开始上传</button>
+                <button id="preUploadStartBtn" class="btn btn-primary" disabled>
+                    <i class="fa fa-upload"></i> 开始上传
+                </button>
             </div>
         </div>
     </div>
@@ -8607,7 +8866,8 @@ const state = {
     token: null,
     localAvatar: null,
     viewingOwner: null,
-    pendingUploadFiles: [], 
+    pendingUploadFiles: [],
+    selectedUploadFiles: new Set(),
     currentRepo: null,
     currentPath: '',
     currentBranch: null,
@@ -8846,6 +9106,14 @@ menuUsageGuide: document.getElementById('menuUsageGuide'),
     preUploadAddBtn: document.getElementById('preUploadAddBtn'),
     preUploadStartBtn: document.getElementById('preUploadStartBtn'),
     preUploadClearBtn: document.getElementById('preUploadClearBtn'),
+    preUploadSelectAll: document.getElementById('preUploadSelectAll'),
+    preUploadBatchBar: document.getElementById('preUploadBatchBar'),
+    preUploadBatchDeleteBtn: document.getElementById('preUploadBatchDeleteBtn'),
+    preUploadSelectedCount: document.getElementById('preUploadSelectedCount'),
+    preUploadCountBadge: document.getElementById('preUploadCountBadge'),
+    preUploadTotalSize: document.getElementById('preUploadTotalSize'),
+    preUploadDropZone: document.getElementById('preUploadDropZone'),
+    preUploadDropOverlay: document.getElementById('preUploadDropOverlay'),
     customDomainTabBtn: document.getElementById('customDomainTabBtn'),
     toolbar: document.getElementById('toolbar'),
     searchInput: document.getElementById('searchInput'),
@@ -13932,16 +14200,20 @@ function handleFilesSelected(e) {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    // 统一逻辑：只添加到暂存区，不立即上传
+    // 新添加的文件默认全部选中
+    const startIndex = state.pendingUploadFiles.length;
     state.pendingUploadFiles = [...state.pendingUploadFiles, ...files];
+    for (let i = startIndex; i < state.pendingUploadFiles.length; i++) {
+        state.selectedUploadFiles.add(i);
+    }
     renderPreUploadList();
-    
+
     // 如果面板没打开，打开它
     if (el.preUploadModal.classList.contains('hidden')) {
         showPreUploadModal();
     }
-    
-    e.target.value = ''; 
+
+    e.target.value = '';
 }
 
 
@@ -13997,8 +14269,10 @@ function hidePreUploadModal() {
     el.preUploadModal.classList.add('hidden');
     const index = uiStateStack.indexOf(hidePreUploadModal);
     if (index > -1) uiStateStack.splice(index, 1);
-    
+
     state.pendingUploadFiles = [];
+    state.selectedUploadFiles.clear();
+    if (el.preUploadSelectAll) el.preUploadSelectAll.checked = false;
     renderPreUploadList();
 }
 
@@ -14007,50 +14281,244 @@ function renderPreUploadList() {
     const container = el.preUploadList;
     container.innerHTML = '';
 
+    // 更新数量徽标
+    if (el.preUploadCountBadge) {
+        el.preUploadCountBadge.textContent = state.pendingUploadFiles.length;
+        el.preUploadCountBadge.style.display = state.pendingUploadFiles.length > 0 ? 'inline-flex' : 'none';
+    }
+
+    // 更新总大小
+    updatePreUploadTotalSize();
+
     if (state.pendingUploadFiles.length === 0) {
         container.innerHTML = `
             <div class="empty-state" style="padding: 20px; text-align: center; color: #9ca3af;">
-                <i class="fa fa-cloud-upload" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                <p style="font-size: 0.8rem;">暂无待上传文件</p>
+                <i class="fa fa-cloud-upload" style="font-size: 2rem; margin-bottom: 10px; color: #9ca3af;"></i>
+                <p style="font-size: 0.8rem;">暂无文件</p>
+                <p style="font-size: 0.7rem; color: #6b7280; margin-top: 4px;">点击"添加文件"或拖拽文件到此处</p>
             </div>`;
         el.preUploadStartBtn.disabled = true;
+        updateBatchBarVisibility();
+        updatePreUploadSelectAllState();
         return;
     }
 
-    el.preUploadStartBtn.disabled = false;
+    const hasSelection = state.selectedUploadFiles.size > 0;
+    el.preUploadStartBtn.disabled = !hasSelection;
 
     state.pendingUploadFiles.forEach((file, index) => {
+        const isChecked = state.selectedUploadFiles.has(index);
         const div = document.createElement('div');
-        div.className = 'pre-upload-item';
+        div.className = `pre-upload-item${isChecked ? ' selected-file' : ''}`;
         div.innerHTML = `
+            <input type="checkbox" class="pre-upload-checkbox" data-index="${index}" ${isChecked ? 'checked' : ''}>
+            <i class="fa ${getFileIcon(file.name)}" style="font-size: 0.85rem; color: #9ca3af; flex-shrink: 0;"></i>
             <span class="pre-upload-name" title="${file.name}">${file.name}</span>
-            <div style="display:flex; align-items:center;">
-                <span class="pre-upload-size">${formatSize(file.size)}</span>
-                <button class="btn-icon-sm danger remove-pending-btn" data-index="${index}">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
+            <span class="pre-upload-size">${formatSize(file.size)}</span>
+            <button class="btn-icon-sm danger remove-pending-btn" data-index="${index}" title="移除">
+                <i class="fa fa-times"></i>
+            </button>
         `;
         container.appendChild(div);
     });
 
-    // 绑定删除按钮事件
+    bindPreUploadListEvents();
+    updateBatchBarVisibility();
+    updatePreUploadSelectAllState();
+    updateSelectedCountDisplay();
+}
+
+// --- 绑定待上传列表事件 ---
+function bindPreUploadListEvents() {
+    const container = el.preUploadList;
+
+    // 复选框变更
+    container.querySelectorAll('.pre-upload-checkbox').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            if (e.target.checked) {
+                state.selectedUploadFiles.add(idx);
+            } else {
+                state.selectedUploadFiles.delete(idx);
+            }
+            // 同步更新视觉状态
+            const item = e.target.closest('.pre-upload-item');
+            if (item) {
+                item.classList.toggle('selected-file', e.target.checked);
+            }
+            updateBatchBarVisibility();
+            updatePreUploadSelectAllState();
+            updateSelectedCountDisplay();
+            el.preUploadStartBtn.disabled = state.selectedUploadFiles.size === 0;
+        });
+    });
+
+    // 删除按钮
     container.querySelectorAll('.remove-pending-btn').forEach(btn => {
-        btn.onclick = (e) => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const idx = parseInt(e.currentTarget.dataset.index);
-            state.pendingUploadFiles.splice(idx, 1);
-            renderPreUploadList();
-        };
+            removePendingFileByIndex(idx);
+        });
+    });
+
+    // 点击整行切换复选框（但不包括按钮和复选框本身）
+    container.querySelectorAll('.pre-upload-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.closest('.pre-upload-checkbox') || e.target.closest('.remove-pending-btn')) {
+                return;
+            }
+            const cb = item.querySelector('.pre-upload-checkbox');
+            if (cb) {
+                cb.checked = !cb.checked;
+                cb.dispatchEvent(new Event('change'));
+            }
+        });
     });
 }
 
-function handleStartBatchUpload() {
-    if (state.pendingUploadFiles.length === 0) return;
+// --- 根据索引安全移除文件（处理选中状态偏移）---
+function removePendingFileByIndex(index) {
+    state.pendingUploadFiles.splice(index, 1);
+    // 重建选中状态（因为索引变了）
+    const newSelected = new Set();
+    const oldSelected = Array.from(state.selectedUploadFiles).sort((a, b) => a - b);
+    oldSelected.forEach(oldIdx => {
+        if (oldIdx < index) {
+            newSelected.add(oldIdx);
+        } else if (oldIdx > index) {
+            newSelected.add(oldIdx - 1);
+        }
+        // oldIdx === index 的项被删除，不添加
+    });
+    state.selectedUploadFiles = newSelected;
+    renderPreUploadList();
+}
 
-    const filesToUpload = [...state.pendingUploadFiles];
-    
+// --- 更新批量操作工具栏可见性 ---
+function updateBatchBarVisibility() {
+    if (!el.preUploadBatchBar) return;
+    if (state.pendingUploadFiles.length > 0) {
+        el.preUploadBatchBar.classList.add('visible');
+    } else {
+        el.preUploadBatchBar.classList.remove('visible');
+    }
+}
+
+// --- 更新全选复选框状态 ---
+function updatePreUploadSelectAllState() {
+    if (!el.preUploadSelectAll) return;
+    const total = state.pendingUploadFiles.length;
+    const selected = state.selectedUploadFiles.size;
+    if (total === 0) {
+        el.preUploadSelectAll.checked = false;
+        el.preUploadSelectAll.indeterminate = false;
+    } else if (selected === total) {
+        el.preUploadSelectAll.checked = true;
+        el.preUploadSelectAll.indeterminate = false;
+    } else if (selected === 0) {
+        el.preUploadSelectAll.checked = false;
+        el.preUploadSelectAll.indeterminate = false;
+    } else {
+        el.preUploadSelectAll.checked = false;
+        el.preUploadSelectAll.indeterminate = true;
+    }
+}
+
+// --- 更新选中计数显示 ---
+function updateSelectedCountDisplay() {
+    if (el.preUploadSelectedCount) {
+        el.preUploadSelectedCount.textContent = `已选 ${state.selectedUploadFiles.size} 个`;
+    }
+    if (el.preUploadBatchDeleteBtn) {
+        el.preUploadBatchDeleteBtn.disabled = state.selectedUploadFiles.size === 0;
+    }
+}
+
+// --- 更新总大小显示 ---
+function updatePreUploadTotalSize() {
+    if (!el.preUploadTotalSize) return;
+    if (state.pendingUploadFiles.length === 0) {
+        el.preUploadTotalSize.textContent = '';
+        return;
+    }
+    const totalBytes = state.pendingUploadFiles.reduce((sum, f) => sum + (f.size || 0), 0);
+    const selectedBytes = Array.from(state.selectedUploadFiles).reduce((sum, idx) => {
+        const f = state.pendingUploadFiles[idx];
+        return sum + (f ? f.size : 0);
+    }, 0);
+    if (state.selectedUploadFiles.size > 0 && state.selectedUploadFiles.size < state.pendingUploadFiles.length) {
+        el.preUploadTotalSize.textContent = `共 ${formatSize(totalBytes)} / 选中 ${formatSize(selectedBytes)}`;
+    } else {
+        el.preUploadTotalSize.textContent = `共 ${formatSize(totalBytes)}`;
+    }
+}
+
+// --- 处理全选/反选 ---
+function handlePreUploadSelectAll() {
+    const isChecked = el.preUploadSelectAll.checked;
+    if (isChecked) {
+        // 全选
+        for (let i = 0; i < state.pendingUploadFiles.length; i++) {
+            state.selectedUploadFiles.add(i);
+        }
+    } else {
+        // 取消全选
+        state.selectedUploadFiles.clear();
+    }
+    renderPreUploadList();
+}
+
+// --- 批量删除选中项 ---
+function handleBatchDeleteSelected() {
+    const selectedIndices = Array.from(state.selectedUploadFiles).sort((a, b) => b - a);
+    if (selectedIndices.length === 0) return;
+
+    // 从大到小删除，避免索引偏移
+    selectedIndices.forEach(idx => {
+        state.pendingUploadFiles.splice(idx, 1);
+    });
+
+    // 重建选中状态
+    state.selectedUploadFiles.clear();
+    renderPreUploadList();
+    showToast(`已移除 ${selectedIndices.length} 个文件`);
+}
+
+// --- 处理拖拽文件 ---
+function handleDropFiles(files) {
+    if (!files || files.length === 0) return;
+    const validFiles = Array.from(files).filter(f => f.size > 0);
+    if (validFiles.length === 0) {
+        showToast('无法添加空文件', 'error');
+        return;
+    }
+    // 新添加的文件默认全部选中
+    const startIndex = state.pendingUploadFiles.length;
+    state.pendingUploadFiles = [...state.pendingUploadFiles, ...validFiles];
+    for (let i = startIndex; i < state.pendingUploadFiles.length; i++) {
+        state.selectedUploadFiles.add(i);
+    }
+
+    // 如果模态框未打开，自动打开
+    if (el.preUploadModal.classList.contains('hidden')) {
+        showPreUploadModal();
+    } else {
+        renderPreUploadList();
+    }
+    showToast(`已添加 ${validFiles.length} 个文件`);
+}
+
+function handleStartBatchUpload() {
+    if (state.selectedUploadFiles.size === 0) return;
+
+    // 只上传选中的文件
+    const selectedIndices = Array.from(state.selectedUploadFiles).sort((a, b) => a - b);
+    const filesToUpload = selectedIndices.map(idx => state.pendingUploadFiles[idx]);
+
     hidePreUploadModal();
-    state.pendingUploadFiles = []; // 清空暂存区
+    state.pendingUploadFiles = [];
+    state.selectedUploadFiles.clear();
 
     // 打开进度面板
     el.uploadPanel.classList.remove('hidden');
@@ -19475,14 +19943,96 @@ el.menuBatchPublishSites.onclick = () => {
     
     // 新增面板按钮绑定
     el.preUploadAddBtn.onclick = () => el.fileUploadInput.click();
-    
+
     el.preUploadClearBtn.onclick = () => {
         state.pendingUploadFiles = [];
+        state.selectedUploadFiles.clear();
+        if (el.preUploadSelectAll) el.preUploadSelectAll.checked = false;
         renderPreUploadList();
     };
-    
+
     el.preUploadStartBtn.onclick = handleStartBatchUpload;
     el.fileUploadInput.addEventListener('change', handleFilesSelected);
+
+    // 批量操作事件
+    if (el.preUploadSelectAll) {
+        el.preUploadSelectAll.addEventListener('change', handlePreUploadSelectAll);
+    }
+    if (el.preUploadBatchDeleteBtn) {
+        el.preUploadBatchDeleteBtn.addEventListener('click', handleBatchDeleteSelected);
+    }
+
+    // 拖拽上传事件
+    if (el.preUploadDropZone) {
+        const dropZone = el.preUploadDropZone;
+
+        // 拖拽进入
+        dropZone.addEventListener('dragenter', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('drag-over');
+            if (el.preUploadDropOverlay) el.preUploadDropOverlay.classList.remove('hidden');
+        });
+
+        // 拖拽悬停
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('drag-over');
+            if (el.preUploadDropOverlay) el.preUploadDropOverlay.classList.remove('hidden');
+        });
+
+        // 拖拽离开
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            // 只有真正离开dropZone时才移除样式
+            if (!dropZone.contains(e.relatedTarget)) {
+                dropZone.classList.remove('drag-over');
+                if (el.preUploadDropOverlay) el.preUploadDropOverlay.classList.add('hidden');
+            }
+        });
+
+        // 放置
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('drag-over');
+            if (el.preUploadDropOverlay) el.preUploadDropOverlay.classList.add('hidden');
+
+            const files = e.dataTransfer.files;
+            if (files && files.length > 0) {
+                handleDropFiles(files);
+            }
+        });
+    }
+
+    // 页面级拖拽（当模态框打开时，允许拖拽到整个模态框区域）
+    el.preUploadModal.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        if (el.preUploadDropOverlay && el.preUploadDropZone) {
+            el.preUploadDropZone.classList.add('drag-over');
+            el.preUploadDropOverlay.classList.remove('hidden');
+        }
+    });
+    el.preUploadModal.addEventListener('dragover', (e) => {
+        e.preventDefault();
+    });
+    el.preUploadModal.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        // 如果离开的是modal本身而不是子元素
+        if (e.target === el.preUploadModal && el.preUploadDropOverlay && el.preUploadDropZone) {
+            el.preUploadDropZone.classList.remove('drag-over');
+            el.preUploadDropOverlay.classList.add('hidden');
+        }
+    });
+    el.preUploadModal.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (e.target === el.preUploadModal) {
+            if (el.preUploadDropOverlay) el.preUploadDropOverlay.classList.add('hidden');
+            if (el.preUploadDropZone) el.preUploadDropZone.classList.remove('drag-over');
+        }
+    });
     el.searchToggleBtn.addEventListener('click', () => {
         el.searchInput.classList.toggle('hidden');
         if (!el.searchInput.classList.contains('hidden')) {
