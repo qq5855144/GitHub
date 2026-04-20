@@ -11581,6 +11581,13 @@ async function navigateToRepo(repoData, branch, path = '', updateHistory = true)
     }
     state.currentView = 'file_list';
     state.isSearchResultsView = false;
+    state.isLocalSearchResultsView = false;
+    state.searchQuery = '';
+    if (el.searchInput) {
+        el.searchInput.value = '';
+        el.searchInput.classList.add('hidden');
+        el.searchInput.style.display = 'none';
+    }
     if (state.currentRepo !== repoData.full_name || state.currentBranch !== branch) {
         state.repoTreeCache = null;
     }
@@ -11809,6 +11816,7 @@ async function fetchFilesFromNetwork(isInitialLoad = false, pathForFetch, isSile
             const spinner = document.querySelector('#fileList .spinner');
             if (spinner) {
                 if (!state.files) state.files = [];
+                applyFiltersAndSort();
                 renderFileList();
             }
         }
@@ -11823,7 +11831,7 @@ let fileListObserver = null;
 
 function renderFileList() {
     if (!state.loadedImageMap) state.loadedImageMap = new Map();
-    const list = (state.displayFiles && state.displayFiles.length >= 0) ? state.displayFiles : state.files;
+    const list = (state.displayFiles && state.displayFiles.length > 0) ? state.displayFiles : state.files;
     el.fileList.innerHTML = '';
     if (!list || list.length === 0) {
         const emptyState = document.createElement('div');
@@ -12140,14 +12148,19 @@ function renderPathNav() {
 }
 
 function navigateToDir(dirName) {
-state.isSearchResultsView = false;
+    state.isSearchResultsView = false;
+    state.isLocalSearchResultsView = false;
     const newPath = state.currentPath ? `${state.currentPath}${dirName}/` : `${dirName}/`;
     navigateToPath(newPath);
 }
 
 function navigateToPath(path, updateHistory = true) {
-    state.shouldAnimateList = true; 
+    state.shouldAnimateList = true;
     state.currentPath = path;
+    state.searchQuery = '';
+    if (el.searchInput) {
+        el.searchInput.value = '';
+    }
     if (updateHistory) {
         const newState = {
     view: 'file_list',
@@ -15607,10 +15620,18 @@ function hideRenameModal() {
 }
 
 
+// 记录上传面板在弹窗前的可见状态
+let uploadPanelVisibleBeforeModal = false;
+
 function hideDeleteModal() {
     el.deleteModal.classList.add('hidden');
     const index = uiStateStack.indexOf(hideDeleteModal);
     if (index > -1) uiStateStack.splice(index, 1);
+    // 恢复上传面板的显示状态
+    if (uploadPanelVisibleBeforeModal && el.uploadPanel.classList.contains('hidden')) {
+        el.uploadPanel.classList.remove('hidden');
+    }
+    uploadPanelVisibleBeforeModal = false;
 }
 
 
@@ -15625,7 +15646,13 @@ function showDeleteModal(item, isDir = false, title, description, onConfirm, con
     }
 
     el.deleteConfirm.textContent = confirmButtonText;
-    el.deleteConfirm.className = `btn ${confirmButtonClass}`; 
+    el.deleteConfirm.className = `btn ${confirmButtonClass}`;
+
+    // 如果上传面板正在显示，临时隐藏它以避免覆盖冲突弹窗
+    uploadPanelVisibleBeforeModal = !el.uploadPanel.classList.contains('hidden');
+    if (uploadPanelVisibleBeforeModal) {
+        el.uploadPanel.classList.add('hidden');
+    }
 
     el.deleteModal.classList.remove('hidden');
     
