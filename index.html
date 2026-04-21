@@ -11254,7 +11254,7 @@ function renderBranchSwitcher() {
         }
         option.textContent = branch.name;
         option.dataset.branchName = branch.name;
-        option.addEventListener('click', () => {
+        option.addEventListener('click', async () => {
             const selectedBranch = option.dataset.branchName;
             if (selectedBranch === state.currentBranch) {
                 wrapper.classList.remove('open');
@@ -11273,7 +11273,7 @@ function renderBranchSwitcher() {
             const newState = { repo: state.currentRepo, path: '', branch: state.currentBranch };
             history.replaceState(newState, '', `#/${state.currentRepo}/`);
             renderPathNav();
-            fetchFiles(true);
+            await fetchFiles(true);
             trigger.querySelector('span').textContent = selectedBranch;
             wrapper.classList.remove('open');
         });
@@ -11286,11 +11286,6 @@ function renderBranchSwitcher() {
     trigger.addEventListener('click', (e) => {
         e.stopPropagation();
         wrapper.classList.toggle('open');
-    });
-    document.addEventListener('click', (e) => {
-        if (!wrapper.contains(e.target)) {
-            wrapper.classList.remove('open');
-        }
     });
 }
 
@@ -11662,9 +11657,9 @@ async function fetchFiles(forceRefresh = false, showLoader = true) {
         } else {
             try {
                 const cachedData = await SimpleDB.get(cacheKey);
-                if (cachedData && Array.isArray(cachedData)) {
-                    state.files = cachedData;
-                    state.fileCache.set(cacheKey, cachedData);
+                if (cachedData && cachedData.data && Array.isArray(cachedData.data)) {
+                    state.files = cachedData.data;
+                    state.fileCache.set(cacheKey, cachedData.data);
                     applyFiltersAndSort();
                     renderFileList();
                     hasRenderedCache = true;
@@ -11813,9 +11808,9 @@ async function fetchFilesFromNetwork(isInitialLoad = false, pathForFetch, isSile
             currentFetchController = null;
         }
         if (pathForFetch === state.currentPath) {
-            const spinner = document.querySelector('#fileList .spinner');
-            if (spinner) {
-                if (!state.files) state.files = [];
+            const spinner = document.querySelector('#fileList .loading-spinner');
+            if (spinner && (!state.files || state.files.length === 0)) {
+                state.files = [];
                 applyFiltersAndSort();
                 renderFileList();
             }
@@ -11831,7 +11826,7 @@ let fileListObserver = null;
 
 function renderFileList() {
     if (!state.loadedImageMap) state.loadedImageMap = new Map();
-    const list = (state.displayFiles && state.displayFiles.length > 0) ? state.displayFiles : state.files;
+    const list = (state.displayFiles && state.searchQuery) ? state.displayFiles : state.files;
     el.fileList.innerHTML = '';
     if (!list || list.length === 0) {
         const emptyState = document.createElement('div');
@@ -12170,7 +12165,7 @@ function navigateToPath(path, updateHistory = true) {
 };
 history.pushState(newState, '', `#/${state.currentRepo}/${path}`);
     }
-    fetchFiles();
+    fetchFiles(false, true);
     renderPathNav();
 }
 
@@ -15419,12 +15414,6 @@ async function showCreateBranchModal(repo) {
         e.stopPropagation();
         sourceSelector.wrapper.classList.toggle('open');
     };
-
-    document.addEventListener('click', (e) => {
-        if (!sourceSelector.wrapper.contains(e.target)) {
-            sourceSelector.wrapper.classList.remove('open');
-        }
-    });
 
     el.renameBranchBtn.onclick = function() {
         const branchToRename = sourceSelector.currentSelection.name;
@@ -19921,6 +19910,14 @@ el.authBtn.addEventListener('click', async () => {
         if (!el.customSortDropdown.classList.contains('hidden') && !el.customSortDropdown.contains(e.target) && !e.target.closest('#sortToggleBtn')) {
             hideSortDropdown();
         }
+        const branchWrapper = document.querySelector('.custom-branch-select-wrapper.open');
+        if (branchWrapper && !branchWrapper.contains(e.target) && !e.target.closest('.custom-branch-select-trigger')) {
+            branchWrapper.classList.remove('open');
+        }
+        const sourceBranchSelector = document.getElementById('sourceBranchSelector');
+        if (sourceBranchSelector && sourceBranchSelector.classList.contains('open') && !sourceBranchSelector.contains(e.target)) {
+            sourceBranchSelector.classList.remove('open');
+        }
     });
     
     
@@ -21323,7 +21320,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (state.currentRepo === historyState.repo) {
                                  state.currentPath = historyState.path || '';
                                  state.currentBranch = historyState.branch || 'main';
-                                 fetchFiles(false);
+                                 await fetchFiles(false);
                                  renderPathNav();
                                  updatePaginationUI();
                             } else {
@@ -21335,7 +21332,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } catch (e) {
                         if (state.currentRepo === historyState.repo) {
                              state.currentPath = historyState.path || '';
-                             fetchFiles(false);
+                             await fetchFiles(false);
                              renderPathNav();
                         } else {
                             showToast('网络错误，返回主列表', 'error');
