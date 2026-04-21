@@ -11635,7 +11635,7 @@ async function navigateToRepo(repoData, branch, path = '', updateHistory = true)
         }
     } catch (e) {}
     if (!loadedFromCache) {
-        fetchFiles(false, false);
+        await fetchFiles(false, false);
         if (!state.repoTreeCache) {
             loadRecursiveRepoTree();
         }
