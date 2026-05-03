@@ -4626,12 +4626,21 @@ header {
         display: flex;
         align-items: center;
         padding: 0 0.7rem;
+        padding-right: 42px;
         
         z-index: 1;
     }
     
     #globalSearchInput {
         width: 100%;
+    }
+    
+    #globalSearchSortBtn {
+        right: 6px !important;
+    }
+    
+    #globalSearchSortDropdown {
+        right: 6px !important;
     }
 
     body.light-theme #globalSearchContainer {
@@ -4646,6 +4655,7 @@ header {
     transform: translateY(-50%);
     width: calc(100% - 160px);
     max-width: 400px;
+    padding-right: 36px;
     transition: opacity 0.3s, transform 0.3s;
 }
 
@@ -4670,6 +4680,75 @@ body.light-theme #globalSearchInput {
     color: #111827;
     background: #f9fafb;
     border-color: #d1d5db;
+}
+
+/** 搜索排序按钮悬浮效果 */
+#globalSearchSortBtn:hover {
+    background-color: rgba(107, 114, 128, 0.2);
+}
+
+/** 搜索排序按钮图标颜色 */
+#globalSearchSortBtn i {
+    color: #FB923C;
+}
+
+/** 搜索排序下拉菜单 */
+#globalSearchSortDropdown {
+    text-align: left;
+}
+
+/** 搜索排序下拉菜单项 */
+#globalSearchSortDropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.65rem;
+    color: #d1d5db;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/** 搜索排序下拉菜单项悬浮 */
+#globalSearchSortDropdown .dropdown-item:hover {
+    color: #ffffff;
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.1), rgba(167, 139, 250, 0.15));
+}
+
+/** 搜索排序下拉菜单选中项 */
+#globalSearchSortDropdown .dropdown-item.selected {
+    font-weight: 700;
+    color: #22c55e;
+    background-color: #1f2937;
+}
+
+/** 搜索排序下拉菜单分割线 */
+#globalSearchSortDropdown .dropdown-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.light-theme #globalSearchSortBtn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme #globalSearchSortDropdown .dropdown-item {
+    color: #4b5563;
+}
+
+body.light-theme #globalSearchSortDropdown .dropdown-item:hover {
+    color: #111827;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme #globalSearchSortDropdown .dropdown-item.selected {
+    color: #16a34a;
+    background-color: #f0fdf4;
+}
+
+body.light-theme #globalSearchSortDropdown .dropdown-divider {
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 .search-result-item {
@@ -7396,6 +7475,46 @@ body.light-theme .btn-secondary-action:hover {
     <div id="globalSearchContainer" class="hidden">
     <input id="globalSearchInput" placeholder="搜仓库/@用户/链接/#文件" autocomplete="off">
     <div id="globalSearchHistoryContainer" class="custom-dropdown hidden"></div>
+    <button id="globalSearchSortBtn" class="btn-icon" title="排序方式" style="position:absolute;right:-36px;top:50%;transform:translateY(-50%);width:32px;height:32px;padding:0;font-size:0.75rem;color:#f3f4f6;background:transparent;border:none;border-radius:50%;cursor:pointer;transition:background-color 0.2s;">
+        <i class="fa-solid fa-arrow-down-wide-short"></i>
+    </button>
+    <div id="globalSearchSortDropdown" class="hidden custom-dropdown" style="right:-36px;top:calc(100% + 6px);width:140px;min-width:140px;left:auto;">
+        <div class="dropdown-item" data-sort="stars" data-order="desc">
+            <i class="fa-solid fa-star" style="width:16px;color:#fbbf24;"></i>
+            <span>星标数 (降序)</span>
+        </div>
+        <div class="dropdown-item" data-sort="stars" data-order="asc">
+            <i class="fa-solid fa-star" style="width:16px;color:#94a3b8;"></i>
+            <span>星标数 (升序)</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item" data-sort="forks" data-order="desc">
+            <i class="fa-solid fa-code-fork" style="width:16px;color:#60a5fa;"></i>
+            <span>复刻数</span>
+        </div>
+        <div class="dropdown-item" data-sort="watchers" data-order="desc">
+            <i class="fa-solid fa-eye" style="width:16px;color:#34d399;"></i>
+            <span>关注数</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item" data-sort="created" data-order="desc">
+            <i class="fa-solid fa-calendar-plus" style="width:16px;color:#f472b6;"></i>
+            <span>创建日期 (新→旧)</span>
+        </div>
+        <div class="dropdown-item" data-sort="created" data-order="asc">
+            <i class="fa-solid fa-calendar-plus" style="width:16px;color:#94a3b8;"></i>
+            <span>创建日期 (旧→新)</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-item" data-sort="pushed" data-order="desc">
+            <i class="fa-solid fa-upload" style="width:16px;color:#fb923c;"></i>
+            <span>推送日期 (新→旧)</span>
+        </div>
+        <div class="dropdown-item" data-sort="pushed" data-order="asc">
+            <i class="fa-solid fa-upload" style="width:16px;color:#94a3b8;"></i>
+            <span>推送日期 (旧→新)</span>
+        </div>
+    </div>
 </div>
     <button id="globalSearchToggleBtn" class="btn-icon" title="全局搜索">
         <i class="fa fa-search"></i>
@@ -8893,6 +9012,8 @@ const state = {
     publicSearchPage: 1,
     publicSearchTotalResults: 0,
     publicSearchPerPage: 20, 
+    publicSearchSort: localStorage.getItem('public_search_sort') || 'stars',
+    publicSearchOrder: localStorage.getItem('public_search_order') || 'desc',
     
     repoListScrollPosition: 0,
     publicSearchCache: new Map(),
@@ -9117,6 +9238,8 @@ menuUsageGuide: document.getElementById('menuUsageGuide'),
     customDomainTabBtn: document.getElementById('customDomainTabBtn'),
     toolbar: document.getElementById('toolbar'),
     searchInput: document.getElementById('searchInput'),
+    globalSearchSortBtn: document.getElementById('globalSearchSortBtn'),
+    globalSearchSortDropdown: document.getElementById('globalSearchSortDropdown'),
     viewToggleBtn: document.getElementById('viewToggleBtn'),
     proxyQuickToggle: document.getElementById('proxyQuickToggle'),
     proxySettingsModal: document.getElementById('proxySettingsModal'),
@@ -12200,6 +12323,35 @@ function hideSortDropdown() {
 function showSortDropdown() {
     el.customSortDropdown.classList.remove('hidden');
     uiStateStack.push(hideSortDropdown);
+}
+
+function hideSearchSortDropdown() {
+    if (el.globalSearchSortDropdown) {
+        el.globalSearchSortDropdown.classList.add('hidden');
+    }
+    const index = uiStateStack.indexOf(hideSearchSortDropdown);
+    if (index > -1) uiStateStack.splice(index, 1);
+}
+
+function showSearchSortDropdown() {
+    if (el.globalSearchSortDropdown) {
+        updateSearchSortDropdownUI();
+        el.globalSearchSortDropdown.classList.remove('hidden');
+        uiStateStack.push(hideSearchSortDropdown);
+    }
+}
+
+function updateSearchSortDropdownUI() {
+    if (!el.globalSearchSortDropdown) return;
+    const currentSort = state.publicSearchSort || 'stars';
+    const currentOrder = state.publicSearchOrder || 'desc';
+    Array.from(el.globalSearchSortDropdown.children).forEach(item => {
+        const itemSort = item.dataset.sort;
+        const itemOrder = item.dataset.order;
+        if (itemSort && itemOrder) {
+            item.classList.toggle('selected', currentSort === itemSort && currentOrder === itemOrder);
+        }
+    });
 }
 
 function showEditModal() {
@@ -18036,7 +18188,9 @@ async function searchPublicRepositories(query, page = 1, updateHistory = true, s
     // 核心修复：先强制设置当前视图状态，确保后续UI渲染逻辑正确
     state.currentView = 'public_search_results';
 
-    const SORT_ORDER = 'stars_desc'; // 标识当前排序方式：按星标降序
+    const sortField = state.publicSearchSort || 'stars';
+    const sortOrder = state.publicSearchOrder || 'desc';
+    const SORT_ORDER = `${sortField}_${sortOrder}`;
     const cacheKey = `${query}_${page}_${SORT_ORDER}`;
     
     // 尝试读取缓存
@@ -18078,8 +18232,10 @@ async function searchPublicRepositories(query, page = 1, updateHistory = true, s
     updateGlobalSearchVisibility();
 
     try {
-        // 关键修改：添加 sort=stars&order=desc 实现按热度排序
-        const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&page=${page}&per_page=${state.publicSearchPerPage}`;
+        // 使用用户选择的排序方式
+        const sortField = state.publicSearchSort || 'stars';
+        const sortOrder = state.publicSearchOrder || 'desc';
+        const url = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=${sortField}&order=${sortOrder}&page=${page}&per_page=${state.publicSearchPerPage}`;
         const res = await fetch(url, { headers: { Authorization: `token ${state.token}` } });
         
         if (!res.ok) {
@@ -19910,6 +20066,9 @@ el.authBtn.addEventListener('click', async () => {
         if (!el.customSortDropdown.classList.contains('hidden') && !el.customSortDropdown.contains(e.target) && !e.target.closest('#sortToggleBtn')) {
             hideSortDropdown();
         }
+        if (el.globalSearchSortDropdown && !el.globalSearchSortDropdown.classList.contains('hidden') && !el.globalSearchSortDropdown.contains(e.target) && !e.target.closest('#globalSearchSortBtn')) {
+            hideSearchSortDropdown();
+        }
         const branchWrapper = document.querySelector('.custom-branch-select-wrapper.open');
         if (branchWrapper && !branchWrapper.contains(e.target) && !e.target.closest('.custom-branch-select-trigger')) {
             branchWrapper.classList.remove('open');
@@ -20103,6 +20262,37 @@ el.menuBatchPublishSites.onclick = () => {
             hideSortDropdown();
         }
     });
+    if (el.globalSearchSortBtn) {
+        el.globalSearchSortBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (el.globalSearchSortDropdown.classList.contains('hidden')) {
+                showSearchSortDropdown();
+            } else {
+                hideSearchSortDropdown();
+            }
+        });
+    }
+    if (el.globalSearchSortDropdown) {
+        el.globalSearchSortDropdown.addEventListener('click', (e) => {
+            const item = e.target.closest('.dropdown-item');
+            if (!item) return;
+            hideSearchSortDropdown();
+            const newSort = item.dataset.sort;
+            const newOrder = item.dataset.order;
+            if (!newSort || !newOrder) return;
+            if (state.publicSearchSort === newSort && state.publicSearchOrder === newOrder) return;
+            state.publicSearchSort = newSort;
+            state.publicSearchOrder = newOrder;
+            localStorage.setItem('public_search_sort', newSort);
+            localStorage.setItem('public_search_order', newOrder);
+            updateSearchSortDropdownUI();
+            // 清除缓存，使用新排序重新搜索
+            state.publicSearchCache.clear();
+            if (state.publicSearchQuery && state.currentView === 'public_search_results') {
+                searchPublicRepositories(state.publicSearchQuery, 1, true);
+            }
+        });
+    }
     el.customSortDropdown.addEventListener('click', (e) => {
         const item = e.target.closest('.dropdown-item');
         state.shouldAnimateList = true;
